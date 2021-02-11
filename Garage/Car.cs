@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Garage
 {
-    class Car : IVehicle
+    class Car : Vehicle
     {
         public enum Fuel
         {

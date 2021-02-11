@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Garage
 {
-    class Airplane : IVehicle
+    class Airplane : Vehicle
     {
         public int NumberOfEngines { get; private set; }
         int IVehicle.RegistryNr { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
