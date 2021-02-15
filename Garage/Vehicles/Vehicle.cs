@@ -4,26 +4,31 @@ using System.Text;
 
 namespace Garage
 {
-    class Vehicle : IVehicle
+    abstract class Vehicle : IVehicle
     {
         protected static List<string> registryNumbers = new List<string>();
 
+
+        public static List<string> RegistryNumbers => registryNumbers;
+        public string Type { get; private set; }
         public string RegistryNr { get; protected set; }
         public string Color { get; protected set; }
         public int NrOfWheels { get; protected set; }
 
-        public Vehicle(string reg, string col, int wh)
+        public Vehicle(string reg, string col, int wheels, string type)
         {
             SetRegistry(reg);
             Color = col;
-            NrOfWheels = wh;
+            NrOfWheels = wheels;
+            Type = type;
         }
 
-        public static void RemoveRegistry(string reg)
+        public void Delete()
         {
-            registryNumbers.Remove(reg);
+            registryNumbers.Remove(RegistryNr);
         }
 
+        
         protected void SetRegistry(string registry)
         {
             foreach (var reg in registryNumbers)

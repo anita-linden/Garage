@@ -5,11 +5,13 @@ using System.Text;
 
 namespace Garage
 {
-    public class Garage<T> : IEnumerable<T>
+    class Garage<T> : IEnumerable<T>
         where T : IVehicle
     {
         private T[] vehicle;
 
+        public int Size => vehicle.Length;
+        public T this[int index] => vehicle[index];
         public Garage(int size)
         {
             vehicle = new T[size];
@@ -20,12 +22,15 @@ namespace Garage
             vehicles.CopyTo(vehicle, 0);
         }
 
-        public IEnumerable<T> ListVehicles()
+        public List<T> ListVehicles()
         {
+            List<T> list = new List<T>();
             foreach (T v in vehicle)
             {
-                yield return v;
+                list.Add(v);
             }
+
+            return list;
         }
 
         public string[] ListVehiclesByType()
@@ -69,16 +74,19 @@ namespace Garage
             throw new ArgumentException("Registry does not exist");
         }
 
-        public IEnumerable<T> FindVehicles(Type type = null , string color = "", int nrOfWheels = -1)
+        public List<T> FindVehicles(string type = "", int nrOfWheels = -1, string color = "")
         {
+            List<T> list = new List<T>();
             foreach (T v in vehicle)
             {
-                if (type is null || v.GetType().Equals(type))
-                    if (color == "" || v.Color.ToLower() == color.ToLower())
-                        if (nrOfWheels > -1 || nrOfWheels == v.NrOfWheels)
-                            yield return v;
+                if (type == "" || v.Type.Equals(type))
+                    if (color == "" || v.Color.ToLower().Equals(color.ToLower()))
+                        if (nrOfWheels <= -1 || nrOfWheels == v.NrOfWheels)
+                            list.Add(v);
             }
 
+            if (list.Count > 0)
+                return list;
             throw new ArgumentException("Nothing by those parameters");
         }
 
@@ -102,9 +110,9 @@ namespace Garage
                 {
                     for (;i<vehicle.Length;i++)
                     {
+                        vehicle[i].Delete();
                         vehicle[i] = vehicle[i + 1];
                     }
-                    IVehicle.RemoveRegistry(registration);
                 }
             }
         }
