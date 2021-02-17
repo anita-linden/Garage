@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Garage
@@ -12,6 +13,8 @@ namespace Garage
 
         public int Size => vehicle.Length;
         public T this[int index] => vehicle[index];
+
+        
         public Garage(int size)
         {
             vehicle = new T[size];
@@ -22,15 +25,20 @@ namespace Garage
             vehicles.CopyTo(vehicle, 0);
         }
 
+        // LINQ istället
         public List<T> ListVehicles()
         {
-            List<T> list = new List<T>();
-            foreach (T v in vehicle)
-            {
-                list.Add(v);
-            }
 
-            return list;
+            //List<T> list = new List<T>();
+            //foreach (T v in vehicle)
+            //{
+            //    list.Add(v);
+            //}
+
+            //return list;
+            return vehicle.ToList();
+            
+
         }
 
         public string[] ListVehiclesByType()
@@ -61,33 +69,55 @@ namespace Garage
             return value;
         }
 
+        // LINQ
         public T FindVehicle(string registration)
         {
-            foreach (T v in vehicle)
+            //foreach (T v in vehicle)
+            //{
+            //    if (registration.ToLower()==v.RegistryNr.ToLower())
+            //    {
+            //        return v;
+            //    }
+            //}
+
+            //throw new ArgumentException("Registry does not exist");
+            try
             {
-                if (registration.ToLower()==v.RegistryNr.ToLower())
-                {
-                    return v;
-                }
+                return vehicle.FirstOrDefault(v => v.RegistryNr == registration);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ajabaja");
+                throw;
             }
 
-            throw new ArgumentException("Registry does not exist");
         }
 
         public List<T> FindVehicles(string type = "", int nrOfWheels = -1, string color = "")
         {
-            List<T> list = new List<T>();
-            foreach (T v in vehicle)
-            {
-                if (type == "" || v.Type.Equals(type))
-                    if (color == "" || v.Color.ToLower().Equals(color.ToLower()))
-                        if (nrOfWheels <= -1 || nrOfWheels == v.NrOfWheels)
-                            list.Add(v);
-            }
+            //List<T> list = new List<T>();
+            //foreach (T v in vehicle)
+            //{
+            //    if (type == "" || v.Type.Equals(type))
+            //        if (color == "" || v.Color.ToLower().Equals(color.ToLower()))
+            //            if (nrOfWheels <= -1 || nrOfWheels == v.NrOfWheels)
+            //                list.Add(v);
+            //}
+
+            var query = vehicle.Select(v => v);
+
+            if(type != "") { query = query?.Where(v => v.Type == type); }
+            if(nrOfWheels != -1) { query = query?.Where(v => v.NrOfWheels == nrOfWheels); }
+            if(color != "") { query = query?.Where(v => v.Color == color); }
+
+            var list = query.ToList();
 
             if (list.Count > 0)
                 return list;
             throw new ArgumentException("Nothing by those parameters");
+
+
+
         }
 
         public void AddVehicle(T v)
@@ -119,12 +149,14 @@ namespace Garage
 
         public IEnumerator<T> GetEnumerator()
         {
+            // Nullcheck
             foreach (T v in vehicle)
             {
                 yield return v;
             }
         }
 
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

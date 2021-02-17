@@ -8,6 +8,34 @@ namespace Garage.Test
     {
         private List<IVehicle> testList = new List<IVehicle>();
 
+        private Garage<Vehicle> garage;
+        public TestContext TestContext { get; set; }
+
+        //[TestInitialize]
+        //public void TestInitializer()
+        //{
+        //    if (TestContext.TestName.EndsWith('0'))
+        //    {
+        //        garage = new Garage<Vehicle>(0);
+        //    }
+        //    else
+        //    {
+        //        testList.Add(new Motorcycle("JSH546", "Pink", 700));
+        //        testList.Add(new Motorcycle("COL573", "Black", 800));
+        //        testList.Add(new Boat("KJL232", "Gaudy", 19));
+        //        garage = new Garage<Vehicle>(3);
+
+        //    }
+        //}
+
+        //[TestCleanup]
+        //public void CleanUp()
+        //{
+        //    foreach (IVehicle v in testList)
+        //        v.Delete();
+        //    testList = new List<IVehicle>();
+        //}
+
         [TestMethod]
         public void ConstructorTest()
         {
@@ -17,6 +45,7 @@ namespace Garage.Test
 
             Assert.AreEqual(size, garage.Size);
         }
+
 
         [TestMethod]
         public void ConstructWithVehiclesTest()
@@ -153,6 +182,8 @@ namespace Garage.Test
             }
         }
 
+        //[TestCleanUp]
+        //public void CleanUp()
         private void CleanUp()
         {
             foreach (IVehicle v in testList)

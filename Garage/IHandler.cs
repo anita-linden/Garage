@@ -6,5 +6,6 @@ namespace Garage
 {
     interface IHandler
     {
+        
     }
 }

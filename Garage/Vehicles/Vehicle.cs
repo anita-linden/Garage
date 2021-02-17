@@ -17,7 +17,7 @@ namespace Garage
 
         public Vehicle(string reg, string col, int wheels, string type)
         {
-            SetRegistry(reg);
+            SetRegistry(reg); // Undvik metoder och validering i konstruktorer
             Color = col;
             NrOfWheels = wheels;
             Type = type;
